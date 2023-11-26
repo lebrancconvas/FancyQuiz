@@ -1,0 +1,101 @@
+Table roles {
+  role_id serial4 [primary key]
+  role_name varchar
+  created_at timestamp
+  updated_at timestamp
+  used_flg bool
+}
+
+Table users {
+  user_id serial4 [primary key]
+  fk_role_id int4
+  username varchar [not null]
+  display_name varchar
+  created_at timestamp
+  updated_at timestamp
+  used_flg bool
+}
+
+Table quizzes {
+  quiz_id serial4 [primary key]
+  fk_user_id int4
+  fk_quiz_category_id int4
+  created_at timestamp
+  updated_at timestamp
+  used_flg bool
+}
+
+Table quiz_categories {
+  quiz_category_id serial4 [primary key]
+  created_at timestamp
+  updated_at timestamp
+  used_flg bool
+}
+
+Table quiz_questions {
+  quiz_question_id serial4 [primary key]
+  fk_quiz_id int4
+  question text
+  created_at timestamp
+  updated_at timestamp
+  used_flg bool
+}
+
+Table quiz_question_choices {
+  quiz_question_choice_id serial4 [primary key]
+  fk_quiz_question_id int4
+  question text
+  is_correct bool
+  created_at timestamp
+  updated_at timestamp
+  used_flg bool
+}
+
+Table quiz_histories {
+  quiz_history_id serial4 [primary key]
+  fk_quiz_creator_user_id int4
+  fk_quiz_participant_user_id int4
+  fk_quiz_category_id int4
+  score int
+  created_at timestamp
+  updated_at timestamp
+  used_flg bool
+}
+
+Table admins {
+  admin_id serial4 [primary key]
+  fk_role_id int4
+  username varchar
+  created_at timestamp
+  updated_at timestamp
+  used_flg bool
+}
+
+Table quiz_tags {
+  quiz_tag_id serial4 [primary key]
+  fk_quiz_id int4
+  fk_tag_id int4
+  created_at timestamp
+  updated_at timestamp
+  used_flg bool
+}
+
+Table tags {
+  tag_id serial4 [primary key]
+  tag_name text
+  created_at timestamp
+  updated_at timestamp
+  used_flg bool
+}
+
+ref: roles.role_id < users.fk_role_id
+ref: users.user_id < quizzes.fk_user_id
+ref: quiz_categories.quiz_category_id < quizzes.fk_quiz_category_id
+ref: quizzes.quiz_id < quiz_questions.fk_quiz_id
+ref: quiz_questions.quiz_question_id < quiz_question_choices.quiz_question_choice_id
+ref: users.user_id < quiz_histories.fk_quiz_creator_user_id
+ref: users.user_id < quiz_histories.fk_quiz_participant_user_id
+ref: quiz_categories.quiz_category_id < quiz_histories.quiz_history_id
+ref: roles.role_id < admins.fk_role_id
+ref: quiz_tags.fk_quiz_id < quizzes.quiz_id
+ref: quiz_tags.fk_tag_id < tags.tag_id 
