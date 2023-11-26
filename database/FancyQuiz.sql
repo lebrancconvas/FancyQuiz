@@ -89,6 +89,15 @@ CREATE TABLE IF NOT EXISTS "tags" (
   "used_flg" bool DEFAULT true
 );
 
+CREATE TABLE IF NOT EXISTS "reports" (
+  "report_id" serial4 UNIQUE PRIMARY KEY NOT NULL,
+  "fk_user_id" int4,
+  "report_content" text,
+  "created_at" timestamp DEFAULT CURRENT_TIMESTAMP,
+  "updated_at" timestamp DEFAULT CURRENT_TIMESTAMP,
+  "used_flg" bool DEFAULT true
+);
+
 ALTER TABLE "users" ADD FOREIGN KEY ("fk_role_id") REFERENCES "roles" ("role_id");
 
 ALTER TABLE "quizzes" ADD FOREIGN KEY ("fk_user_id") REFERENCES "users" ("user_id");
@@ -110,3 +119,5 @@ ALTER TABLE "admins" ADD FOREIGN KEY ("fk_role_id") REFERENCES "roles" ("role_id
 ALTER TABLE "quiz_tags" ADD FOREIGN KEY ("fk_quiz_id") REFERENCES "quizzes" ("quiz_id");
 
 ALTER TABLE "quiz_tags" ADD FOREIGN KEY ("fk_tag_id") REFERENCES "tags" ("tag_id");
+
+ALTER TABLE "reports" ADD FOREIGN KEY ("fk_user_id") REFERENCES "users" ("user_id");

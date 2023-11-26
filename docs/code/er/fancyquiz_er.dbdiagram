@@ -89,6 +89,15 @@ Table tags {
   used_flg bool [default: true]
 }
 
+Table reports {
+  report_id serial4 [primary key, not null, unique]
+  fk_user_id int4
+  report_content text
+  created_at timestamp [default: 'CURRENT_TIMESTAMP']
+  updated_at timestamp [default: 'CURRENT_TIMESTAMP']
+  used_flg bool [default: true]
+}
+
 ref: roles.role_id < users.fk_role_id
 ref: users.user_id < quizzes.fk_user_id
 ref: quiz_categories.quiz_category_id < quizzes.fk_quiz_category_id
@@ -100,3 +109,4 @@ ref: quiz_categories.quiz_category_id < quiz_histories.fk_quiz_category_id
 ref: roles.role_id < admins.fk_role_id
 ref: quizzes.quiz_id < quiz_tags.fk_quiz_id
 ref: tags.tag_id < quiz_tags.fk_tag_id
+ref: users.user_id < reports.fk_user_id
