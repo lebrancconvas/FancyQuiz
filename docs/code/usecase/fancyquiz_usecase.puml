@@ -1,0 +1,20 @@
+@startuml fancyquiz
+left to right direction
+actor User
+actor Admin
+rectangle System {
+  User --> (Register / Login)
+  (Register / Login) <-- Admin
+  User --> (View Profile)
+  User --> (CRUD Quiz)
+  User --> (System Report)
+  User --> (Do Quiz)
+  User --> (Quiz Searching)
+  User --> (View Score and Result)
+  User --> (View Quiz History)
+  User --> (View Quiz Statistics)
+  (CRUD Quiz) <-- Admin
+  (User Management) <-- Admin
+  (View System Report) <-- Admin
+}
+@enduml
