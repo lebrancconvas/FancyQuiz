@@ -4,6 +4,9 @@ import (
 	"flag"
 	"fmt"
 	"os"
+
+	"github.com/lebrancconvas/FancyQuiz/db"
+	"github.com/lebrancconvas/FancyQuiz/server"
 )
 
 func init() {
@@ -19,6 +22,8 @@ func main() {
 	flag.Parse()
 
 	// Start Database
+	db.Init()
 
-	// Server Start 
+	// Server Start
+	server.Start()
 }
