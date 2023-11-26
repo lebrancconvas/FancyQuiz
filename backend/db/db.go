@@ -8,6 +8,7 @@ import (
 	"strconv"
 
 	"github.com/go-gorp/gorp"
+	_"github.com/lib/pq"
 )
 
 type DB struct {
