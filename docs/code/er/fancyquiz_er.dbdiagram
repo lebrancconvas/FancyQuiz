@@ -1,101 +1,102 @@
 Table roles {
-  role_id serial4 [primary key]
+  role_id serial4 [primary key, not null, unique]
   role_name varchar
-  created_at timestamp
-  updated_at timestamp
-  used_flg bool
+  created_at timestamp [default: 'CURRENT_TIMESTAMP']
+  updated_at timestamp [default: 'CURRENT_TIMESTAMP']
+  used_flg bool [default: true]
 }
 
 Table users {
-  user_id serial4 [primary key]
+  user_id serial4 [primary key, not null, unique]
   fk_role_id int4
-  username varchar [not null]
+  username varchar [not null, unique]
   display_name varchar
-  created_at timestamp
-  updated_at timestamp
-  used_flg bool
+  created_at timestamp [default: 'CURRENT_TIMESTAMP']
+  updated_at timestamp [default: 'CURRENT_TIMESTAMP']
+  used_flg bool [default: true]
 }
 
 Table quizzes {
-  quiz_id serial4 [primary key]
+  quiz_id serial4 [primary key, not null, unique]
   fk_user_id int4
   fk_quiz_category_id int4
-  created_at timestamp
-  updated_at timestamp
-  used_flg bool
+  created_at timestamp [default: 'CURRENT_TIMESTAMP']
+  updated_at timestamp [default: 'CURRENT_TIMESTAMP']
+  used_flg bool [default: true]
 }
 
 Table quiz_categories {
-  quiz_category_id serial4 [primary key]
-  created_at timestamp
-  updated_at timestamp
-  used_flg bool
+  quiz_category_id serial4 [primary key, not null, unique]
+  category text
+  created_at timestamp [default: 'CURRENT_TIMESTAMP']
+  updated_at timestamp [default: 'CURRENT_TIMESTAMP']
+  used_flg bool [default: true]
 }
 
 Table quiz_questions {
-  quiz_question_id serial4 [primary key]
+  quiz_question_id serial4 [primary key, not null, unique]
   fk_quiz_id int4
   question text
-  created_at timestamp
-  updated_at timestamp
-  used_flg bool
+  created_at timestamp [default: 'CURRENT_TIMESTAMP']
+  updated_at timestamp [default: 'CURRENT_TIMESTAMP']
+  used_flg bool [default: true]
 }
 
 Table quiz_question_choices {
-  quiz_question_choice_id serial4 [primary key]
+  quiz_question_choice_id serial4 [primary key, not null, unique]
   fk_quiz_question_id int4
   question text
   is_correct bool
-  created_at timestamp
-  updated_at timestamp
-  used_flg bool
+  created_at timestamp [default: 'CURRENT_TIMESTAMP']
+  updated_at timestamp [default: 'CURRENT_TIMESTAMP']
+  used_flg bool [default: true]
 }
 
 Table quiz_histories {
-  quiz_history_id serial4 [primary key]
+  quiz_history_id serial4 [primary key, not null, unique]
   fk_quiz_creator_user_id int4
   fk_quiz_participant_user_id int4
   fk_quiz_category_id int4
   score int
-  created_at timestamp
-  updated_at timestamp
-  used_flg bool
+  created_at timestamp [default: 'CURRENT_TIMESTAMP']
+  updated_at timestamp [default: 'CURRENT_TIMESTAMP']
+  used_flg bool [default: true]
 }
 
 Table admins {
-  admin_id serial4 [primary key]
+  admin_id serial4 [primary key, not null, unique]
   fk_role_id int4
   username varchar
-  created_at timestamp
-  updated_at timestamp
-  used_flg bool
+  created_at timestamp [default: 'CURRENT_TIMESTAMP']
+  updated_at timestamp [default: 'CURRENT_TIMESTAMP']
+  used_flg bool [default: true]
 }
 
 Table quiz_tags {
-  quiz_tag_id serial4 [primary key]
+  quiz_tag_id serial4 [primary key, not null, unique]
   fk_quiz_id int4
   fk_tag_id int4
-  created_at timestamp
-  updated_at timestamp
-  used_flg bool
+  created_at timestamp [default: 'CURRENT_TIMESTAMP']
+  updated_at timestamp [default: 'CURRENT_TIMESTAMP']
+  used_flg bool [default: true]
 }
 
 Table tags {
-  tag_id serial4 [primary key]
+  tag_id serial4 [primary key, not null, unique]
   tag_name text
-  created_at timestamp
-  updated_at timestamp
-  used_flg bool
+  created_at timestamp [default: 'CURRENT_TIMESTAMP']
+  updated_at timestamp [default: 'CURRENT_TIMESTAMP']
+  used_flg bool [default: true]
 }
 
 ref: roles.role_id < users.fk_role_id
 ref: users.user_id < quizzes.fk_user_id
 ref: quiz_categories.quiz_category_id < quizzes.fk_quiz_category_id
 ref: quizzes.quiz_id < quiz_questions.fk_quiz_id
-ref: quiz_questions.quiz_question_id < quiz_question_choices.quiz_question_choice_id
+ref: quiz_questions.quiz_question_id < quiz_question_choices.fk_quiz_question_id
 ref: users.user_id < quiz_histories.fk_quiz_creator_user_id
 ref: users.user_id < quiz_histories.fk_quiz_participant_user_id
-ref: quiz_categories.quiz_category_id < quiz_histories.quiz_history_id
+ref: quiz_categories.quiz_category_id < quiz_histories.fk_quiz_category_id
 ref: roles.role_id < admins.fk_role_id
-ref: quiz_tags.fk_quiz_id < quizzes.quiz_id
-ref: quiz_tags.fk_tag_id < tags.tag_id 
+ref: quizzes.quiz_id < quiz_tags.fk_quiz_id
+ref: tags.tag_id < quiz_tags.fk_tag_id
