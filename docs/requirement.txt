@@ -1,0 +1,30 @@
+Functional Requirement
+User
+- Register / Login / Logout
+  - Manual Register
+  - Google Account
+- About Page
+- Contact Page
+== Quiz Creator ==
+- CRUD Quiz
+- Quiz Header
+  - Quiz Name
+  - Quiz Category
+  - Quiz Tag
+  - Quiz Description
+  - Quiz Number Show Set (Can created any number of question but can set the number of question to random and show)
+- Multiple Choice (1 Score per question)
+- Quiz Leaderboard
+== Quiz Participant ==
+- Search Quiz
+  - From Quiz Name
+  - From User who created quiz Name
+  - From Quiz Category
+  - From Tag
+- Do Quiz
+- View Score and Result
+- Quiz Participate History
+- Quiz Leaderboard
+  - If User do the same quiz with higher score then the score will be updated.
+
+Non-Functional Requirement
