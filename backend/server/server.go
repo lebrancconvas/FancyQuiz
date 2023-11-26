@@ -4,5 +4,5 @@ import "os"
 
 func Start() {
 	router := NewRouter()
-	router.Run(":", os.Getenv("PORT"))
+	router.Run(":" + os.Getenv("PORT"))
 }
