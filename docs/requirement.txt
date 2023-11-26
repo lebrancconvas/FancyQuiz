@@ -5,6 +5,11 @@ User
   - Google Account
 - About Page
 - Contact Page
+- User Profile
+  - User Information
+  - User Quiz History
+  - User Quiz Leaderboard
+- Report Bug or any problem 
 == Quiz Creator ==
 - CRUD Quiz
 - Quiz Header
@@ -26,5 +31,11 @@ User
 - Quiz Participate History
 - Quiz Leaderboard
   - If User do the same quiz with higher score then the score will be updated.
+
+Admin
+- Register / Login / Logout
+- User Management
+- Quiz Management
+- Get Report Information and Inform to development team.
 
 Non-Functional Requirement
