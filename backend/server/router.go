@@ -21,9 +21,10 @@ func NewRouter() *gin.Engine {
 		MaxAge: 24 * time.Hour,
 	}))
 
-	// Set API Routes
+	// Init Controllers.
 	testController := new(controllers.TestController)
 
+	// Set API Routes.
 	api := router.Group("/api")
 
 	test := api.Group("/test")
