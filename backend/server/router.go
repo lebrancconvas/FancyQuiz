@@ -28,7 +28,7 @@ func NewRouter() *gin.Engine {
 
 	test := api.Group("/test")
 	{
-		test.GET("/", testController.Ping)
+		test.GET("/ping", testController.Ping)
 	}
 
 	return router
