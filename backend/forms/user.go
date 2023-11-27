@@ -6,3 +6,9 @@ type User struct {
 	DisplayName string `json:"display_name"`
 	CreatedDate string `json:"created_at"`
 }
+
+type UserRegister struct {
+	Username string `json:"username" binding:"required"`
+	Password string `json:"password" binding:"required"`
+	DisplayName string `json:"display_name" binding:"required"`
+}

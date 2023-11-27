@@ -36,6 +36,7 @@ func NewRouter() *gin.Engine {
 	user := api.Group("/users")
 	{
 		user.GET("/", userController.GetAllUsers)
+		user.POST("/", userController.CreateUser)
 	}
 
 	return router
