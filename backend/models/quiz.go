@@ -63,6 +63,7 @@ func (q Quiz) CreateQuiz(userID uint64, categoryID uint64) (uint64, error) {
 	stmt, err = db.Prepare(`
 		SELECT quiz_id
 		FROM quizzes
+		WHERE fk_user_id = $1 AND fk_quiz_category_id = $2
 		ORDER BY created_at DESC
 		LIMIT 1
 	`)
@@ -71,7 +72,7 @@ func (q Quiz) CreateQuiz(userID uint64, categoryID uint64) (uint64, error) {
 	}
 	defer stmt.Close()
 
-	rows, err := stmt.Query()
+	rows, err := stmt.Query(userID, categoryID)
 	if err != nil {
 		return quizID, err
 	}
@@ -109,6 +110,7 @@ func (q Quiz) CreateQuizCategory(category string) (uint64, error) {
 	stmt, err = db.Prepare(`
 		SELECT quiz_category_id
 		FROM quiz_categories
+		WHERE category = $1
 		ORDER BY created_at DESC
 		LIMIT 1
 	`)
@@ -117,7 +119,7 @@ func (q Quiz) CreateQuizCategory(category string) (uint64, error) {
 	}
 	defer stmt.Close()
 
-	rows, err := stmt.Query()
+	rows, err := stmt.Query(category)
 	if err != nil {
 		return quizCategoryID, err
 	}
