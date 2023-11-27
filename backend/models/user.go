@@ -32,7 +32,7 @@ func (u User) GetAllUsers() ([]forms.User, error) {
 	for rows.Next() {
 		var user forms.User
 
-		err := rows.Scan()
+		err := rows.Scan(&user.ID, &user.Username, &user.DisplayName, &user.CreatedDate)
 		if err != nil {
 			return users, err
 		}
