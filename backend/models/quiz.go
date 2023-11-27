@@ -159,7 +159,7 @@ func (q Quiz) CreateQuizQuestion(quizID uint64, question string) (uint64, error)
 		FROM quiz_questions
 		WHERE fk_quiz_id = $1 AND question = $2
 		ORDER BY created_at DESC
-		LIMIT 1 
+		LIMIT 1
 	`)
 	if err != nil {
 		return quizQuestionID, err
@@ -180,4 +180,24 @@ func (q Quiz) CreateQuizQuestion(quizID uint64, question string) (uint64, error)
 	}
 
 	return quizQuestionID, nil
+}
+
+func (q Quiz) CreateQuizQuestionChoice(quizQuestionID uint64, choice string, isCorrect bool) error {
+	db := db.GetDB()
+
+	stmt, err := db.Prepare(`
+		INSERT INTO quiz_question_choices (fk_quiz_question_id, choice, is_correct)
+		VALUES ($1, $2, $3)
+	`)
+	if err != nil {
+		return err
+	}
+	defer stmt.Close()
+
+	_, err = stmt.Exec(quizQuestionID, choice, isCorrect)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
