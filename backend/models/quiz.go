@@ -40,3 +40,95 @@ func (q Quiz) GetAllQuizCategory() ([]forms.QuizCategory, error) {
 
 	return quizCategories, nil
 }
+
+func (q Quiz) CreateQuiz(userID uint64, categoryID uint64) (uint64, error) {
+	db := db.GetDB()
+
+	var quizID uint64
+
+	stmt, err := db.Prepare(`
+		INSERT INTO quizzes (fk_user_id, fk_quiz_category_id)
+		VALUES ($1, $2)
+	`)
+	if err != nil {
+		return quizID, err
+	}
+	defer stmt.Close()
+
+	_, err = stmt.Exec(userID, categoryID)
+	if err != nil {
+		return quizID, err
+	}
+
+	stmt, err = db.Prepare(`
+		SELECT quiz_id
+		FROM quizzes
+		ORDER BY created_at DESC
+		LIMIT 1
+	`)
+	if err != nil {
+		return quizID, err
+	}
+	defer stmt.Close()
+
+	rows, err := stmt.Query()
+	if err != nil {
+		return quizID, err
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		err := rows.Scan(&quizID)
+		if err != nil {
+			return quizID, err
+		}
+	}
+
+	return quizID, nil
+}
+
+func (q Quiz) CreateQuizCategory(category string) (uint64, error) {
+	db := db.GetDB()
+
+	var quizCategoryID uint64
+
+	stmt, err := db.Prepare(`
+		INSERT INTO quiz_categories (category)
+		VALUES ($1)
+	`)
+	if err != nil {
+		return quizCategoryID, err
+	}
+	defer stmt.Close()
+
+	_, err = stmt.Exec(category)
+	if err != nil {
+		return quizCategoryID, err
+	}
+
+	stmt, err = db.Prepare(`
+		SELECT quiz_category_id
+		FROM quiz_categories
+		ORDER BY created_at DESC
+		LIMIT 1
+	`)
+	if err != nil {
+		return quizCategoryID, err
+	}
+	defer stmt.Close()
+
+	rows, err := stmt.Query()
+	if err != nil {
+		return quizCategoryID, err
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		err := rows.Scan(&quizCategoryID)
+		if err != nil {
+			return quizCategoryID, err
+		}
+	}
+
+	return quizCategoryID, nil
+}
