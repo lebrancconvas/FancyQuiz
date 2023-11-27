@@ -24,6 +24,9 @@ func NewRouter() *gin.Engine {
 	// Init Controllers.
 	testController := new(controllers.TestController)
 	userController := new(controllers.UserController)
+	quizController := new(controllers.QuizController)
+	reportController := new(controllers.ReportController)
+	historyController := new(controllers.HistoryController)
 
 	// Set API Routes.
 	api := router.Group("/api")
@@ -37,6 +40,21 @@ func NewRouter() *gin.Engine {
 	{
 		user.GET("/", userController.GetAllUsers)
 		user.POST("/", userController.CreateUser)
+	}
+
+	quiz := api.Group("/quizzes")
+	{
+
+	}
+
+	report := api.Group("/reports")
+	{
+
+	}
+
+	history := api.Group("/histories")
+	{
+		
 	}
 
 	return router
