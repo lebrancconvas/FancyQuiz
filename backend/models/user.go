@@ -43,9 +43,7 @@ func (u User) GetAllUsers() ([]forms.User, error) {
 	return users, nil
 }
 
-func (u User) CreateUser(user forms.UserRegister) (uint64, error) {
-	var userID uint64
-
+func (u User) CreateUser(user forms.UserRegister) error {
 	db := db.GetDB()
 
 	stmt, err := db.Prepare(`
@@ -53,22 +51,14 @@ func (u User) CreateUser(user forms.UserRegister) (uint64, error) {
 		VALUES ($1, $2)
 	`)
 	if err != nil {
-		return userID, err
+		return err
 	}
 	defer stmt.Close()
 
-	rows, err := stmt.Query(user.Username, user.DisplayName)
+	_, err = stmt.Exec(user.Username, user.DisplayName)
 	if err != nil {
-		return userID, err
-	}
-	defer rows.Close()
-
-	for rows.Next() {
-		err := rows.Scan(&userID)
-		if err != nil {
-			return userID, err
-		}
+		return err
 	}
 
-	return userID, nil
+	return nil
 }
