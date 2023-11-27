@@ -12,7 +12,7 @@
     <h1>Fancy Quiz</h1>
   </header>
   <footer>
-    <p>Copyright 2023, Made with Love by <a href="https://github.com/lebrancconvas" target="_blank">Poom Yimyuean (@lebrancconvas)</a> | <a href="https://github.com/lebrancconvas/FancyQuiz" target="_blank">View Github Repo</a></p>
+    <p>Copyright 2023, Made with Love by <a href="https://github.com/lebrancconvas" target="_blank">Poom Yimyuean (@lebrancconvas)</a> | <a href="https://github.com/lebrancconvas/FancyQuiz" target="_blank">View Source Code (Github)</a></p>
   </footer>
 </main>
 
@@ -21,7 +21,7 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Kanit', sans-serif; 
+    font-family: 'Kanit', sans-serif;
   }
 
   header {
