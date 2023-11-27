@@ -49,6 +49,7 @@ func NewRouter() *gin.Engine {
 		quiz.GET("/", quizController.GetAllQuiz)
 		quiz.GET("/c/:id", quizController.GetAllQuizFromCreatedUser)
 		quiz.GET("/p/:id", quizController.GetAllQuizFromParticipatedUser)
+		quiz.GET("/categories", quizController.GetAllQuizCategory)
 		quiz.POST("/", quizController.CreateQuiz)
 		quiz.PUT("/:id", quizController.UpdateQuiz)
 		quiz.DELETE("/:id", quizController.DeleteQuiz)
