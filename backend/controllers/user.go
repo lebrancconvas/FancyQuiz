@@ -5,7 +5,7 @@ import (
 	"strconv"
 
 	"github.com/gin-gonic/gin"
-	"github.com/lebrancconvas/FancyQuiz/forms"
+	// "github.com/lebrancconvas/FancyQuiz/forms"
 	"github.com/lebrancconvas/FancyQuiz/models"
 	"github.com/lebrancconvas/FancyQuiz/utils"
 )
@@ -27,17 +27,11 @@ func (u UserController) GetAllUsers(c *gin.Context) {
 
 func (u UserController) CreateUser(c *gin.Context) {
 	username := c.PostForm("username")
-	password := c.PostForm("password")
+	// password := c.PostForm("password")
 	displayName := c.PostForm("display_name")
 
-	var userInformation forms.UserRegister = forms.UserRegister{
-		Username: username,
-		Password: password,
-		DisplayName: displayName,
-	}
-
 	md := new(models.User)
-	res, err := md.CreateUser(userInformation)
+	res, err := md.CreateUser(username, displayName)
 	if err != nil {
 		utils.UnprocessableLog(c, err)
 		return
