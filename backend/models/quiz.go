@@ -41,21 +41,21 @@ func (q Quiz) GetAllQuizCategory() ([]forms.QuizCategory, error) {
 	return quizCategories, nil
 }
 
-func (q Quiz) CreateQuiz(userID uint64, categoryID uint64) (uint64, error) {
+func (q Quiz) CreateQuiz(userID uint64, categoryID uint64, title string, description string) (uint64, error) {
 	db := db.GetDB()
 
 	var quizID uint64
 
 	stmt, err := db.Prepare(`
-		INSERT INTO quizzes (fk_user_id, fk_quiz_category_id)
-		VALUES ($1, $2)
+		INSERT INTO quizzes (fk_user_id, fk_quiz_category_id, title, description)
+		VALUES ($1, $2, $3, $4)
 	`)
 	if err != nil {
 		return quizID, err
 	}
 	defer stmt.Close()
 
-	_, err = stmt.Exec(userID, categoryID)
+	_, err = stmt.Exec(userID, categoryID, title , description)
 	if err != nil {
 		return quizID, err
 	}
@@ -63,7 +63,7 @@ func (q Quiz) CreateQuiz(userID uint64, categoryID uint64) (uint64, error) {
 	stmt, err = db.Prepare(`
 		SELECT quiz_id
 		FROM quizzes
-		WHERE fk_user_id = $1 AND fk_quiz_category_id = $2
+		WHERE fk_user_id = $1 AND fk_quiz_category_id = $2 AND title = $3 AND description = $4
 		ORDER BY created_at DESC
 		LIMIT 1
 	`)
@@ -72,7 +72,7 @@ func (q Quiz) CreateQuiz(userID uint64, categoryID uint64) (uint64, error) {
 	}
 	defer stmt.Close()
 
-	rows, err := stmt.Query(userID, categoryID)
+	rows, err := stmt.Query(userID, categoryID, title, description)
 	if err != nil {
 		return quizID, err
 	}
