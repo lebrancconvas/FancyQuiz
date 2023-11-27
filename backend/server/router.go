@@ -45,8 +45,8 @@ func NewRouter() *gin.Engine {
 	quiz := api.Group("/quizzes")
 	{
 		quiz.GET("/", quizController.GetAllQuiz)
-		quiz.GET("/", quizController.GetAllQuizFromCreatedUser)
-		quiz.GET("/", quizController.GetAllQuizFromParticipatedUser)
+		quiz.GET("/c/:id", quizController.GetAllQuizFromCreatedUser)
+		quiz.GET("/p/:id", quizController.GetAllQuizFromParticipatedUser)
 		quiz.POST("/", quizController.CreateQuiz)
 		quiz.PUT("/:id", quizController.UpdateQuiz)
 		quiz.DELETE("/:id", quizController.DeleteQuiz)
