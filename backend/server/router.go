@@ -44,17 +44,26 @@ func NewRouter() *gin.Engine {
 
 	quiz := api.Group("/quizzes")
 	{
-
+		quiz.GET("/", quizController.GetAllQuiz)
+		quiz.GET("/", quizController.GetAllQuizFromCreatedUser)
+		quiz.GET("/", quizController.GetAllQuizFromParticipatedUser)
+		quiz.POST("/", quizController.CreateQuiz)
+		quiz.PUT("/:id", quizController.UpdateQuiz)
+		quiz.DELETE("/:id", quizController.DeleteQuiz)
 	}
 
 	report := api.Group("/reports")
 	{
-
+		report.GET("/", reportController.GetAllReport)
+		report.GET("/:date", reportController.GetReportFromDateCreated)
+		report.POST("/", reportController.CreateReport)
 	}
 
 	history := api.Group("/histories")
 	{
-		
+		history.GET("/", historyController.GetAllHistory)
+		history.GET("/:id", historyController.GetHistoryFromUser)
+		history.POST("/", historyController.CreateHistory)
 	}
 
 	return router
