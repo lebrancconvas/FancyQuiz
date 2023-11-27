@@ -134,3 +134,50 @@ func (q Quiz) CreateQuizCategory(category string) (uint64, error) {
 
 	return quizCategoryID, nil
 }
+
+func (q Quiz) CreateQuizQuestion(quizID uint64, question string) (uint64, error) {
+	db := db.GetDB()
+
+	var quizQuestionID uint64
+
+	stmt, err := db.Prepare(`
+		INSERT INTO quiz_questions (fk_quiz_id, question)
+		VALUES ($1, $2)
+	`)
+	if err != nil {
+		return quizQuestionID, err
+	}
+	defer stmt.Close()
+
+	_, err = stmt.Exec(quizID, question)
+	if err != nil {
+		return quizQuestionID, err
+	}
+
+	stmt, err = db.Prepare(`
+		SELECT quiz_question_id
+		FROM quiz_questions
+		WHERE fk_quiz_id = $1 AND question = $2
+		ORDER BY created_at DESC
+		LIMIT 1 
+	`)
+	if err != nil {
+		return quizQuestionID, err
+	}
+	defer stmt.Close()
+
+	rows, err := stmt.Query(quizID, question)
+	if err != nil {
+		return quizQuestionID, err
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		err := rows.Scan(&quizQuestionID)
+		if err != nil {
+			return quizQuestionID, err
+		}
+	}
+
+	return quizQuestionID, nil
+}
