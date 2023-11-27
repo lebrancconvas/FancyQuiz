@@ -1,7 +1,7 @@
 package forms
 
 type User struct {
-	ID uint64 `json:"id"`
+	UserID uint64 `json:"user_id"`
 	Username string `json:"username"`
 	DisplayName string `json:"display_name"`
 	CreatedDate string `json:"created_at"`

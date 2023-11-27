@@ -40,6 +40,8 @@ func NewRouter() *gin.Engine {
 	{
 		user.GET("/", userController.GetAllUsers)
 		user.POST("/", userController.CreateUser)
+		user.PUT("/:user_id", userController.UpdateUser)
+		user.DELETE("/:user_id", userController.DeleteUser)
 	}
 
 	quiz := api.Group("/quizzes")
