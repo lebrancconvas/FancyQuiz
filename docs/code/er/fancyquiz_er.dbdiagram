@@ -20,6 +20,8 @@ Table quizzes {
   quiz_id serial4 [primary key, not null, unique]
   fk_user_id int4
   fk_quiz_category_id int4
+  title text [not null] 
+  description text
   created_at timestamp [default: 'CURRENT_TIMESTAMP']
   updated_at timestamp [default: 'CURRENT_TIMESTAMP']
   used_flg bool [default: true]
