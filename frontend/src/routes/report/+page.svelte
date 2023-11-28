@@ -30,10 +30,10 @@
     <h1>Report Problem</h1>
   </header>
   <section id="report-section">
-    <div>
+    <div id="textarea-container">
       <textarea name="report" id="report" cols="30" rows="10" bind:value={reportContent}></textarea>
     </div>
-    <div>
+    <div id="button-container">
       <button on:click={submitHandler}>Submit</button>
     </div>
   </section>
@@ -45,14 +45,26 @@
     text-align: center;
   }
 
-  textarea {
+  #textarea-container {
     width: 80%;
+    /* outline: 1px solid black; */
+    margin: 0 auto;
+  }
+
+  textarea {
+    width: 100%;
+    height: 700px;
     border: 2px solid black;
     border-radius: 5px;
     font-size: 18px;
     padding: 5px;
     margin-left: auto;
     margin-right: auto;
+  }
+
+  #button-container {
+    width: 0;
+    margin: 0 auto;
   }
 
   button {
