@@ -1,5 +1,5 @@
 INSERT INTO report_statuses (status)
-VALUES ('assigned');
+VALUES ('pending');
 
 INSERT INTO report_statuses (status)
 VALUES ('accepted');
