@@ -70,6 +70,8 @@ func NewRouter() *gin.Engine {
 		history.GET("/", historyController.GetAllHistory)
 		history.GET("/:user_id", historyController.GetHistoryFromUser)
 		history.POST("/", historyController.CreateHistory)
+		history.DELETE("/:history_id", historyController.DeleteHistory)
+		history.DELETE("/:user_id", historyController.DeleteAllHistoryFromUser)
 	}
 
 	return router

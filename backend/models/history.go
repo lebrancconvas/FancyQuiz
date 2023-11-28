@@ -43,3 +43,46 @@ func (h History) GetAllHistoryFromUser(userID uint64) ([]forms.History, error) {
 
 	return histories, nil
 }
+
+func (h History) DeleteHistory(historyID uint64) error {
+	db := db.GetDB()
+
+	stmt, err := db.Prepare(`
+		UPDATE quiz_histories
+		SET used_flg = false
+		WHERE quiz_history_id = $1
+	`)
+	if err != nil {
+		return err
+	}
+	defer stmt.Close()
+
+	_, err = stmt.Exec(historyID)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (h History) DeleteAllHistoryFromUser(userID uint64) error {
+	db := db.GetDB()
+
+	stmt, err := db.Prepare(`
+		UPDATE quiz_histories
+		SET used_flg = false
+		WHERE fk_quiz_participant_user_id = $1
+	`)
+	if err != nil {
+		return err
+	}
+	defer stmt.Close()
+
+	_, err = stmt.Exec(userID)
+	if err != nil {
+		return err
+	}
+
+	return nil
+
+}
