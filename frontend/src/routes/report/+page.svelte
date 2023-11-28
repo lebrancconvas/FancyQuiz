@@ -5,13 +5,12 @@
   let userID = 1;
   let reportContent: string = '';
 
-  let requestData = {
-    userID: userID,
-    content: reportContent
-  };
-
   function submitHandler() {
-    axios.post('http://localhost:8081/api/reports', requestData)
+    let requestData = {
+      userID: userID,
+      content: reportContent
+    };
+    axios.post('http://localhost:8011/api/reports/', requestData)
       .then(response => {
         console.log(response);
         window.location.reload();

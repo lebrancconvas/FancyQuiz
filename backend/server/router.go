@@ -1,7 +1,7 @@
 package server
 
 import (
-	"time"
+	_"time"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
@@ -12,14 +12,7 @@ func NewRouter() *gin.Engine {
 	router := gin.New()
 	router.Use(gin.Logger())
 	router.Use(gin.Recovery())
-	router.Use(cors.New(cors.Config{
-		AllowOrigins: []string{"http://localhost:7101/"},
-		AllowMethods: []string{"GET", "POST", "PUT", "PATCH", "DELETE", "HEAD", "OPTIONS"},
-		AllowHeaders: []string{"Origin", "X-Requested-With", "Content-Type", "Accept", "Authorization", "Access-Control-Allow-Origin"},
-		ExposeHeaders: []string{"Content-Length"},
-		AllowCredentials: true,
-		MaxAge: 24 * time.Hour,
-	}))
+	router.Use(cors.Default())
 
 	// Init Controllers.
 	testController := new(controllers.TestController)

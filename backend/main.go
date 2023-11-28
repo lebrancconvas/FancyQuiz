@@ -11,7 +11,7 @@ import (
 
 func init() {
 	// Localhost Environment.
-	os.Setenv("PORT", "8081")
+	os.Setenv("PORT", "8011")
 	os.Setenv("DBHOST", "localhost")
 	os.Setenv("DBPORT", "5432")
 	os.Setenv("DBUSER", "postgres")
