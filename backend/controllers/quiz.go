@@ -68,5 +68,19 @@ func (q QuizController) UpdateQuiz(c *gin.Context) {
 }
 
 func (q QuizController) DeleteQuiz(c *gin.Context) {
+	quizID := c.Param("quiz_id")
 
+	md := new(models.Quiz)
+
+	quizIDInt, err := strconv.Atoi(quizID)
+	if err != nil {
+		utils.UnprocessableLog(c, err)
+		return
+	}
+
+	err = md.DeleteQuiz(uint64(quizIDInt))
+	if err != nil {
+		utils.UnprocessableLog(c, err)
+		return
+	}
 }

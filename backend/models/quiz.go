@@ -201,3 +201,24 @@ func (q Quiz) CreateQuizQuestionChoice(quizQuestionID uint64, choice string, isC
 
 	return nil
 }
+
+func (q Quiz) DeleteQuiz(quizID uint64) error {
+	db := db.GetDB()
+
+	stmt, err := db.Prepare(`
+		UPDATE quizzes
+		SET used_flg = false
+		WHERE quiz_id = $1
+	`)
+	if err != nil {
+		return err
+	}
+	defer stmt.Close()
+
+	_, err = stmt.Exec(quizID)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
