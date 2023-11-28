@@ -2,7 +2,7 @@
   import axios from 'axios';
   import Footer from '../../components/Footer.svelte';
 
-  let userID = 1;
+  let userID = 1; // Test User ID.
   let reportContent: string = '';
 
   function submitHandler() {
