@@ -222,3 +222,25 @@ func (q Quiz) DeleteQuiz(quizID uint64) error {
 
 	return nil
 }
+
+func (q Quiz) UpdateQuiz(quizID uint64, categoryID uint64, title string, description string) error {
+	db := db.GetDB()
+
+	stmt, err := db.Prepare(`
+		UPDATE quizzes
+		SET fk_quiz_category = $2, title = $3, description = $4
+		WHERE quiz_id = $1
+	`)
+	if err != nil {
+		return err
+	}
+	defer stmt.Close()
+
+	_, err = stmt.Exec(quizID, categoryID, title, description)
+	if err != nil {
+		return err
+	}
+
+	return nil
+
+}

@@ -64,7 +64,27 @@ func (q QuizController) CreateQuiz(c *gin.Context) {
 }
 
 func (q QuizController) UpdateQuiz(c *gin.Context) {
+	type RequestData struct {
+		QuizID uint64 `json:"quiz_id"`
+		CategoryID uint64 `json:"quiz_category_id"`
+		Title string `json:"title"`
+		Description string `json:"description"`
+	}
 
+	req := RequestData{}
+	err := c.ShouldBindJSON(&req)
+	if err != nil {
+		utils.UnprocessableLog(c, err)
+		return
+	}
+
+	md := new(models.Quiz)
+
+	err = md.UpdateQuiz(req.QuizID, req.CategoryID, req.Title, req.Description)
+	if err != nil {
+		utils.UnprocessableLog(c, err)
+		return
+	}
 }
 
 func (q QuizController) DeleteQuiz(c *gin.Context) {
