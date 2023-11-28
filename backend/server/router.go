@@ -60,6 +60,9 @@ func NewRouter() *gin.Engine {
 		report.GET("/", reportController.GetAllReport)
 		report.GET("/:date", reportController.GetReportFromDateCreated)
 		report.POST("/", reportController.CreateReport)
+		report.PUT("/:report_id/accept", reportController.AcceptReport)
+		report.PUT("/:report_id/complete", reportController.CompleteReport)
+		report.DELETE("/:report_id", reportController.DeleteReport)
 	}
 
 	history := api.Group("/histories")

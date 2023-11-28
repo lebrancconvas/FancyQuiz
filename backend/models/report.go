@@ -13,7 +13,7 @@ func (r Report) GetAllReport() ([]forms.Report, error) {
 	var reports []forms.Report
 
 	stmt, err := db.Prepare(`
-		SELECT report_id, fk_user_id, report_content
+		SELECT report_id, fk_user_id, fk_report_status_id, report_content
 		FROM reports
 		WHERE used_flg = true
 		ORDER BY created_at DESC
@@ -32,7 +32,7 @@ func (r Report) GetAllReport() ([]forms.Report, error) {
 	for rows.Next() {
 		var report forms.Report
 
-		err := rows.Scan(&report.ReportID, &report.UserID, &report.Content)
+		err := rows.Scan(&report.ReportID, &report.UserID, &report.StatusID, &report.Content)
 		if err != nil {
 			return reports, err
 		}
@@ -41,4 +41,87 @@ func (r Report) GetAllReport() ([]forms.Report, error) {
 	}
 
 	return reports, nil
+}
+
+func (r Report) CreateReport(userID uint64, report string) error {
+	db := db.GetDB()
+
+	stmt, err := db.Prepare(`
+		INSERT INTO reports (fk_user_id, fk_report_status_id, report_content)
+		VALUES ($1, 1, $2)
+	`)
+	if err != nil {
+		return err
+	}
+	defer stmt.Close()
+
+	_, err = stmt.Exec(userID, report)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (r Report) DeleteReport(reportID uint64) error {
+	db := db.GetDB()
+
+	stmt, err := db.Prepare(`
+		UPDATE reports
+		SET used_flg = false
+		WHERE report_id = $1 
+	`)
+	if err != nil {
+		return err
+	}
+	defer stmt.Close()
+
+	_, err = stmt.Exec(reportID)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (r Report) UpdateReportToBeAccepted(reportID uint64) error {
+	db := db.GetDB()
+
+	stmt, err := db.Prepare(`
+		UPDATE reports
+		SET fk_report_status_id = 2
+		WHERE report_id = $1
+	`)
+	if err != nil {
+		return err
+	}
+	defer stmt.Close()
+
+	_, err = stmt.Exec(reportID)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (r Report) UpdateReportToBeCompleted(reportID uint64) error {
+	db := db.GetDB()
+
+	stmt, err := db.Prepare(`
+		UPDATE reports
+		SET fk_report_status_id = 3
+		WHERE report_id = $1
+	`)
+	if err != nil {
+		return err
+	}
+	defer stmt.Close()
+
+	_, err = stmt.Exec(reportID)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
