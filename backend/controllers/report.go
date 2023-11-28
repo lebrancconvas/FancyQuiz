@@ -56,9 +56,7 @@ func (r ReportController) CreateReport(c *gin.Context) {
 }
 
 func (r ReportController) DeleteReport(c *gin.Context) {
-	reportID := c.Param("report_id")
-
-	reportIDInt, err := strconv.Atoi(reportID)
+	reportID, err := strconv.Atoi(c.Param("report_id"))
 	if err != nil {
 		utils.UnprocessableLog(c, err)
 		return
@@ -66,11 +64,15 @@ func (r ReportController) DeleteReport(c *gin.Context) {
 
 	md := new(models.Report)
 
-	err = md.DeleteReport(uint64(reportIDInt))
+	err = md.DeleteReport(uint64(reportID))
 	if err != nil {
 		utils.UnprocessableLog(c, err)
 		return
 	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"message": "Report deleted successfully",
+	})
 }
 
 func (r ReportController) AcceptReport(c *gin.Context) {
@@ -89,12 +91,14 @@ func (r ReportController) AcceptReport(c *gin.Context) {
 		utils.UnprocessableLog(c, err)
 		return
 	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"message": "Report accepted successfully",
+	})
 }
 
 func (r ReportController) CompleteReport(c *gin.Context) {
-	reportID := c.Param("report_id")
-
-	reportIDInt, err := strconv.Atoi(reportID)
+	reportID, err := strconv.Atoi(c.Param("report_id"))
 	if err != nil {
 		utils.UnprocessableLog(c, err)
 		return
@@ -102,11 +106,15 @@ func (r ReportController) CompleteReport(c *gin.Context) {
 
 	md := new(models.Report)
 
-	err = md.UpdateReportToBeCompleted(uint64(reportIDInt))
+	err = md.UpdateReportToBeCompleted(uint64(reportID))
 	if err != nil {
 		utils.UnprocessableLog(c, err)
 		return
 	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"message": "Report completed successfully",
+	})
 }
 
 
