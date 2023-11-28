@@ -88,15 +88,22 @@ func (q QuizController) CreateQuiz(c *gin.Context) {
 }
 
 func (q QuizController) UpdateQuiz(c *gin.Context) {
+	quizID := c.Param("quiz_id")
+
 	type RequestData struct {
-		QuizID uint64 `json:"quiz_id"`
 		CategoryID uint64 `json:"quiz_category_id"`
 		Title string `json:"title"`
 		Description string `json:"description"`
 	}
 
+	quizIDInt, err := strconv.Atoi(quizID)
+	if err != nil {
+		utils.UnprocessableLog(c, err)
+		return
+	}
+
 	req := RequestData{}
-	err := c.ShouldBindJSON(&req)
+	err = c.ShouldBindJSON(&req)
 	if err != nil {
 		utils.UnprocessableLog(c, err)
 		return
@@ -104,7 +111,7 @@ func (q QuizController) UpdateQuiz(c *gin.Context) {
 
 	md := new(models.Quiz)
 
-	err = md.UpdateQuiz(req.QuizID, req.CategoryID, req.Title, req.Description)
+	err = md.UpdateQuiz(uint64(quizIDInt), req.CategoryID, req.Title, req.Description)
 	if err != nil {
 		utils.UnprocessableLog(c, err)
 		return
