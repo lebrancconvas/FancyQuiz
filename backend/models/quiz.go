@@ -202,6 +202,71 @@ func (q Quiz) CreateQuizQuestionChoice(quizQuestionID uint64, choice string, isC
 	return nil
 }
 
+func (q Quiz) GetAllQuizHeader() ([]forms.QuizHeader, error) {
+	db := db.GetDB()
+
+	var quizHeaders []forms.QuizHeader
+
+	stmt, err := db.Prepare(`
+		SELECT DISTINCT fk_user_id, quiz_id, fk_quiz_category_id, title, description
+		FROM quizzes
+		WHERE used_flg = true
+		ORDER BY created_at DESC
+	`)
+	if err != nil {
+		return quizHeaders, err
+	}
+	defer stmt.Close()
+
+	rows, err := stmt.Query()
+	if err != nil {
+		return quizHeaders, err
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		var quizHeader forms.QuizHeader
+		err := rows.Scan(&quizHeader.UserID, &quizHeader.QuizID, &quizHeader.QuizCategoryID, &quizHeader.Title, &quizHeader.Description)
+		if err != nil {
+			return quizHeaders, err
+		}
+		quizHeaders = append(quizHeaders, quizHeader)
+	}
+
+	return quizHeaders, nil
+}
+
+func (q Quiz) GetAllQuiz() ([]forms.Quiz, error) {
+	db := db.GetDB()
+
+	var quizzes []forms.Quiz
+
+	stmt, err := db.Prepare(`
+
+	`)
+	if err != nil {
+		return quizzes, err
+	}
+	defer stmt.Close()
+
+	rows, err := stmt.Query()
+	if err != nil {
+		return quizzes, err
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		var quiz forms.Quiz
+		err := rows.Scan()
+		if err != nil {
+			return quizzes, err
+		}
+		quizzes = append(quizzes, quiz)
+	}
+
+	return quizzes, nil
+}
+
 func (q Quiz) DeleteQuiz(quizID uint64) error {
 	db := db.GetDB()
 

@@ -5,6 +5,14 @@ type QuizCategory struct {
 	Category string `json:"category"`
 }
 
+type QuizHeader struct {
+	UserID uint64 `json:"user_id"`
+	QuizID uint64 `json:"quiz_id"`
+	QuizCategoryID uint64 `json:"quiz_category_id"`
+	Title string `json:"title"`
+	Description string `json:"description"`
+}
+
 type Quiz struct {
 	UserID uint64 `json:"user_id"`
 	QuizID uint64 `json:"quiz_id"`

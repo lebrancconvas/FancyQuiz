@@ -11,8 +11,32 @@ import (
 
 type QuizController struct{}
 
-func (q QuizController) GetAllQuiz(c *gin.Context) {
+func (q QuizController) GetAllQuizHeader(c *gin.Context) {
+	md := new(models.Quiz)
 
+	res, err := md.GetAllQuizHeader()
+	if err != nil {
+		utils.UnprocessableLog(c, err)
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"data": res,
+	})
+}
+
+func (q QuizController) GetAllQuiz(c *gin.Context) {
+	md := new(models.Quiz)
+
+	res, err := md.GetAllQuiz()
+	if err != nil {
+		utils.UnprocessableLog(c, err)
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"data": res,
+	})
 }
 
 func (q QuizController) GetAllQuizFromCreatedUser(c *gin.Context) {
