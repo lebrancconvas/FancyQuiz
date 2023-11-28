@@ -20,6 +20,8 @@ CREATE TABLE IF NOT EXISTS "quizzes" (
   "quiz_id" serial4 UNIQUE PRIMARY KEY NOT NULL,
   "fk_user_id" int4,
   "fk_quiz_category_id" int4,
+  "title" text NOT NULL,
+  "description" text,
   "created_at" timestamp DEFAULT CURRENT_TIMESTAMP,
   "updated_at" timestamp DEFAULT CURRENT_TIMESTAMP,
   "used_flg" bool DEFAULT true
@@ -92,7 +94,16 @@ CREATE TABLE IF NOT EXISTS "tags" (
 CREATE TABLE IF NOT EXISTS "reports" (
   "report_id" serial4 UNIQUE PRIMARY KEY NOT NULL,
   "fk_user_id" int4,
+  "fk_report_status_id" int4,
   "report_content" text,
+  "created_at" timestamp DEFAULT CURRENT_TIMESTAMP,
+  "updated_at" timestamp DEFAULT CURRENT_TIMESTAMP,
+  "used_flg" bool DEFAULT true
+);
+
+CREATE TABLE IF NOT EXISTS "report_statuses" (
+  "report_status_id" serial4 UNIQUE PRIMARY KEY NOT NULL,
+  "status" text,
   "created_at" timestamp DEFAULT CURRENT_TIMESTAMP,
   "updated_at" timestamp DEFAULT CURRENT_TIMESTAMP,
   "used_flg" bool DEFAULT true
@@ -121,3 +132,5 @@ ALTER TABLE "quiz_tags" ADD FOREIGN KEY ("fk_quiz_id") REFERENCES "quizzes" ("qu
 ALTER TABLE "quiz_tags" ADD FOREIGN KEY ("fk_tag_id") REFERENCES "tags" ("tag_id");
 
 ALTER TABLE "reports" ADD FOREIGN KEY ("fk_user_id") REFERENCES "users" ("user_id");
+
+ALTER TABLE "reports" ADD FOREIGN KEY ("fk_report_status_id") REFERENCES "report_statuses" ("report_status_id");
