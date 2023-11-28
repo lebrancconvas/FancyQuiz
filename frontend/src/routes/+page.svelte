@@ -1,6 +1,5 @@
 <script lang="ts">
 
-
 </script>
 
 <svelte:head>
