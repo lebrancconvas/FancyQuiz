@@ -21,6 +21,7 @@ func (q QuizController) GetAllQuizHeader(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{
+		"message": "Get All Quiz Header Success!",
 		"data": res,
 	})
 }
@@ -35,6 +36,7 @@ func (q QuizController) GetAllQuiz(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{
+		"message": "Get All Quiz Success!",
 		"data": res,
 	})
 }
@@ -56,6 +58,7 @@ func (q QuizController) GetAllQuizCategory(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{
+		"message": "Get All Quiz Category Success!",
 		"data": res,
 	})
 }
