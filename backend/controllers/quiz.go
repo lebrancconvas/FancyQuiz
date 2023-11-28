@@ -88,15 +88,13 @@ func (q QuizController) CreateQuiz(c *gin.Context) {
 }
 
 func (q QuizController) UpdateQuiz(c *gin.Context) {
-	quizID := c.Param("quiz_id")
-
 	type RequestData struct {
 		CategoryID uint64 `json:"quiz_category_id"`
 		Title string `json:"title"`
 		Description string `json:"description"`
 	}
 
-	quizIDInt, err := strconv.Atoi(quizID)
+	quizID, err := strconv.Atoi(c.Param("quiz_id"))
 	if err != nil {
 		utils.UnprocessableLog(c, err)
 		return
@@ -111,27 +109,33 @@ func (q QuizController) UpdateQuiz(c *gin.Context) {
 
 	md := new(models.Quiz)
 
-	err = md.UpdateQuiz(uint64(quizIDInt), req.CategoryID, req.Title, req.Description)
+	err = md.UpdateQuiz(uint64(quizID), req.CategoryID, req.Title, req.Description)
 	if err != nil {
 		utils.UnprocessableLog(c, err)
 		return
 	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"message": "Update Quiz Success!",
+	})
 }
 
 func (q QuizController) DeleteQuiz(c *gin.Context) {
-	quizID := c.Param("quiz_id")
+	quizID, err := strconv.Atoi(c.Param("quiz_id"))
+	if err != nil {
+		utils.UnprocessableLog(c, err)
+		return
+	}
 
 	md := new(models.Quiz)
 
-	quizIDInt, err := strconv.Atoi(quizID)
+	err = md.DeleteQuiz(uint64(quizID))
 	if err != nil {
 		utils.UnprocessableLog(c, err)
 		return
 	}
 
-	err = md.DeleteQuiz(uint64(quizIDInt))
-	if err != nil {
-		utils.UnprocessableLog(c, err)
-		return
-	}
+	c.JSON(http.StatusOK, gin.H{
+		"message": "Delete Quiz Success!",
+	})
 }
