@@ -15,7 +15,7 @@ func NewRouter() *gin.Engine {
 	router.Use(cors.New(cors.Config{
 		AllowAllOrigins: true,
 		AllowMethods: []string{"GET", "POST", "PUT", "PATCH", "DELETE", "HEAD", "OPTIONS"},
-		AllowHeaders: []string{"Origin", "X-Requested-With", "Content-Type", "Accept", "Authorization"},
+		AllowHeaders: []string{"Origin", "X-Requested-With", "Content-Type", "Accept", "Authorization", "Access-Control-Allow-Origin"},
 		ExposeHeaders: []string{"Content-Length"},
 		AllowCredentials: true,
 		MaxAge: 24 * time.Hour,
@@ -70,8 +70,8 @@ func NewRouter() *gin.Engine {
 		history.GET("/", historyController.GetAllHistory)
 		history.GET("/:user_id", historyController.GetHistoryFromUser)
 		history.POST("/", historyController.CreateHistory)
-		history.DELETE("/:history_id", historyController.DeleteHistory)
-		history.DELETE("/:user_id", historyController.DeleteAllHistoryFromUser)
+		// history.DELETE("/:history_id", historyController.DeleteHistory)
+		// history.DELETE("/:user_id", historyController.DeleteAllHistoryFromUser)
 	}
 
 	return router

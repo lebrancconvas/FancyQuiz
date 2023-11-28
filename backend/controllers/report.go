@@ -30,7 +30,29 @@ func (r ReportController) GetReportFromDateCreated(c *gin.Context) {
 }
 
 func (r ReportController) CreateReport(c *gin.Context) {
+	type RequestData struct {
+		UserID uint64 `json:"userID" binding:"required"`
+		ReportContent string `json:"content"`
+	}
 
+	req := RequestData{}
+	err := c.ShouldBindJSON(&req)
+	if err != nil {
+		utils.UnprocessableLog(c, err)
+		return
+	}
+
+	md := new(models.Report)
+
+	err = md.CreateReport(req.UserID, req.ReportContent)
+	if err != nil {
+		utils.UnprocessableLog(c, err)
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"message": "Report created successfully",
+	})
 }
 
 func (r ReportController) DeleteReport(c *gin.Context) {
