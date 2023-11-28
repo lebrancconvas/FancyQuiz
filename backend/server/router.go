@@ -68,7 +68,7 @@ func NewRouter() *gin.Engine {
 	history := api.Group("/histories")
 	{
 		history.GET("/", historyController.GetAllHistory)
-		history.GET("/:id", historyController.GetHistoryFromUser)
+		history.GET("/:user_id", historyController.GetHistoryFromUser)
 		history.POST("/", historyController.CreateHistory)
 	}
 
