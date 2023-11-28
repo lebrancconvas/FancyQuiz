@@ -21,6 +21,7 @@ func (u UserController) GetAllUsers(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{
+		"message": "Get All Users Success!",
 		"data": res,
 	})
 }
@@ -38,6 +39,7 @@ func (u UserController) CreateUser(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{
+		"message": "Create User Success!",
 		"data": res,
 	})
 }
@@ -66,6 +68,10 @@ func (u UserController) UpdateUser(c *gin.Context) {
 		utils.UnprocessableLog(c, err)
 		return
 	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"message": "Update User Success!",
+	})
 }
 
 func (u UserController) DeleteUser(c *gin.Context) {
@@ -82,4 +88,8 @@ func (u UserController) DeleteUser(c *gin.Context) {
 		utils.UnprocessableLog(c, err)
 		return
 	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"message": "Delete User Success!",
+	})
 }
