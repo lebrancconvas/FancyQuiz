@@ -56,6 +56,7 @@ CREATE TABLE IF NOT EXISTS "quiz_question_choices" (
 
 CREATE TABLE IF NOT EXISTS "quiz_histories" (
   "quiz_history_id" serial4 UNIQUE PRIMARY KEY NOT NULL,
+  "fk_quiz_id" int4,
   "fk_quiz_creator_user_id" int4,
   "fk_quiz_participant_user_id" int4,
   "fk_quiz_category_id" int4,
@@ -122,6 +123,8 @@ ALTER TABLE "quiz_question_choices" ADD FOREIGN KEY ("fk_quiz_question_id") REFE
 ALTER TABLE "quiz_histories" ADD FOREIGN KEY ("fk_quiz_creator_user_id") REFERENCES "users" ("user_id");
 
 ALTER TABLE "quiz_histories" ADD FOREIGN KEY ("fk_quiz_participant_user_id") REFERENCES "users" ("user_id");
+
+ALTER TABLE "quiz_histories" ADD FOREIGN KEY ("fk_quiz_id") REFERENCES "quizzes" ("quiz_id");
 
 ALTER TABLE "quiz_histories" ADD FOREIGN KEY ("fk_quiz_category_id") REFERENCES "quiz_categories" ("quiz_category_id");
 
