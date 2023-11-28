@@ -13,5 +13,7 @@
 </main>
 
 <style>
-
+  header {
+    text-align: center; 
+  }
 </style>
