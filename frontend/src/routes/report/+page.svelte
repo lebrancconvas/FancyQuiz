@@ -1,5 +1,5 @@
 <script lang="ts">
-
+  import Footer from '../../components/Footer.svelte';
 </script>
 
 <svelte:head>
@@ -10,10 +10,11 @@
   <header>
     <h1>Report Problem</h1>
   </header>
+  <Footer />
 </main>
 
 <style>
   header {
-    text-align: center; 
+    text-align: center;
   }
 </style>
