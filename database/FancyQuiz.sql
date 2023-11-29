@@ -16,6 +16,17 @@ CREATE TABLE IF NOT EXISTS "users" (
   "used_flg" bool DEFAULT true
 );
 
+CREATE TABLE IF NOT EXISTS "user_informations" (
+  "user_information_id" serial4 UNIQUE PRIMARY KEY NOT NULL,
+  "fk_user_id" int4,
+  "profile_image_path" text,
+  "email" varchar,
+  "bio" text,
+  "created_at" timestamp DEFAULT CURRENT_TIMESTAMP,
+  "updated_at" timestamp DEFAULT CURRENT_TIMESTAMP,
+  "used_flg" bool DEFAULT true
+);
+
 CREATE TABLE IF NOT EXISTS "quizzes" (
   "quiz_id" serial4 UNIQUE PRIMARY KEY NOT NULL,
   "fk_user_id" int4,
@@ -137,3 +148,5 @@ ALTER TABLE "quiz_tags" ADD FOREIGN KEY ("fk_tag_id") REFERENCES "tags" ("tag_id
 ALTER TABLE "reports" ADD FOREIGN KEY ("fk_user_id") REFERENCES "users" ("user_id");
 
 ALTER TABLE "reports" ADD FOREIGN KEY ("fk_report_status_id") REFERENCES "report_statuses" ("report_status_id");
+
+ALTER TABLE "user_informations" ADD FOREIGN KEY ("fk_user_id") REFERENCES "users" ("user_id")
