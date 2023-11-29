@@ -65,19 +65,18 @@ func (q QuizController) GetAllQuizCategory(c *gin.Context) {
 
 func (q QuizController) CreateQuiz(c *gin.Context) {
 	var userID uint64 = 0
-	categoryID := c.PostForm("category_id")
-	title := c.PostForm("title")
-	description := c.PostForm("description")
-
-	md := new(models.Quiz)
-
-	categoryIDInt, err := strconv.Atoi(categoryID)
+	categoryID, err := strconv.Atoi(c.PostForm("category_id"))
 	if err != nil {
 		utils.UnprocessableLog(c, err)
 		return
 	}
 
-	_, err = md.CreateQuiz(userID, uint64(categoryIDInt), title, description)
+
+	title := c.PostForm("title")
+	description := c.PostForm("description")
+
+	md := new(models.Quiz)
+	_, err = md.CreateQuiz(userID, uint64(categoryID), title, description)
 	if err != nil {
 		utils.UnprocessableLog(c, err)
 		return
