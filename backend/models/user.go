@@ -43,6 +43,42 @@ func (u User) GetAllUsers() ([]forms.User, error) {
 	return users, nil
 }
 
+func (u User) GetUserInformation(userID uint64) ([]forms.UserInformation, error) {
+	db := db.GetDB()
+
+	var userInformations []forms.UserInformation
+
+	stmt, err := db.Prepare(`
+		SELECT DISTINCT users.user_id, users.username, users.display_name, user_informations.profile_image_path, user_informations.email, user_informations.bio, users.created_at
+		FROM users
+		LEFT JOIN user_informations ON users.user_id = user_informations.fk_user_id
+		WHERE users.user_id = $1 AND users.used_flg = true 
+	`)
+	if err != nil {
+		return userInformations, err
+	}
+	defer stmt.Close()
+
+	rows, err := stmt.Query(userID)
+	if err != nil {
+		return userInformations, err
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		var userInformation forms.UserInformation
+
+		err := rows.Scan(&userInformation.UserID, &userInformation.Username, &userInformation.DisplayName, &userInformation.ProfileImage, &userInformation.Email, &userInformation.Bio, &userInformation.CreatedDate)
+		if err != nil {
+			return userInformations, err
+		}
+
+		userInformations = append(userInformations, userInformation)
+	}
+
+	return userInformations, nil
+}
+
 func (u User) CreateUser(username string, displayName string) (uint64, error) {
 	db := db.GetDB()
 

@@ -26,6 +26,26 @@ func (u UserController) GetAllUsers(c *gin.Context) {
 	})
 }
 
+func (u UserController) GetUserInformation(c *gin.Context) {
+	userID, err := strconv.Atoi(c.Param("user_id"))
+	if err != nil {
+		utils.UnprocessableLog(c, err)
+		return
+	}
+
+	md := new(models.User)
+	res, err := md.GetUserInformation(uint64(userID))
+	if err != nil {
+		utils.UnprocessableLog(c, err)
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"message": "Get User Information Success!",
+		"data": res,
+	})
+}
+
 func (u UserController) CreateUser(c *gin.Context) {
 	username := c.PostForm("username")
 	// password := c.PostForm("password")

@@ -32,6 +32,7 @@ func NewRouter() *gin.Engine {
 	user := api.Group("/users")
 	{
 		user.GET("/", userController.GetAllUsers)
+		user.GET("/:user_id", userController.GetUserInformation)
 		user.POST("/", userController.CreateUser)
 		user.PUT("/:user_id", userController.UpdateUser)
 		user.DELETE("/:user_id", userController.DeleteUser)
