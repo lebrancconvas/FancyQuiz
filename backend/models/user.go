@@ -52,7 +52,7 @@ func (u User) GetUserInformation(userID uint64) ([]forms.UserInformation, error)
 		SELECT DISTINCT users.user_id, users.username, users.display_name, user_informations.profile_image_path, user_informations.email, user_informations.bio, users.created_at
 		FROM users
 		LEFT JOIN user_informations ON users.user_id = user_informations.fk_user_id
-		WHERE users.user_id = $1 AND users.used_flg = true 
+		WHERE users.user_id = $1 AND users.used_flg = true
 	`)
 	if err != nil {
 		return userInformations, err
@@ -79,21 +79,21 @@ func (u User) GetUserInformation(userID uint64) ([]forms.UserInformation, error)
 	return userInformations, nil
 }
 
-func (u User) CreateUser(username string, displayName string) (uint64, error) {
+func (u User) CreateUser(username string, password string, displayName string) (uint64, error) {
 	db := db.GetDB()
 
 	var userID uint64
 
 	stmt, err := db.Prepare(`
-		INSERT INTO users (username, display_name)
-		VALUES ($1, $2)
+		INSERT INTO users (username, fk_role_id, display_name, passcode)
+		VALUES ($1, 1, $3, $2)
 	`)
 	if err != nil {
 		return userID, err
 	}
 	defer stmt.Close()
 
-	_, err = stmt.Exec(username, displayName)
+	_, err = stmt.Exec(username, password, displayName)
 	if err != nil {
 		return userID, err
 	}
@@ -101,7 +101,7 @@ func (u User) CreateUser(username string, displayName string) (uint64, error) {
 	stmt, err = db.Prepare(`
 		SELECT id
 		FROM users
-		WHERE username = $1 AND display_name = $2
+		WHERE username = $1 AND display_name = $3 AND passcode = $2 AND used_flg = true
 		ORDER BY created_at DESC
 		LIMIT 1
 	`)
@@ -146,6 +146,8 @@ func (u User) UpdateUser(userID uint64, displayName string) error {
 
 	return nil
 }
+
+// func (u User)
 
 func (u User) DeleteUser(userID uint64) error {
 	db := db.GetDB()

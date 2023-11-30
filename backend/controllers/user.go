@@ -5,6 +5,7 @@ import (
 	"strconv"
 
 	"github.com/gin-gonic/gin"
+	"golang.org/x/crypto/bcrypt"
 	// "github.com/lebrancconvas/FancyQuiz/forms"
 	"github.com/lebrancconvas/FancyQuiz/models"
 	"github.com/lebrancconvas/FancyQuiz/utils"
@@ -47,12 +48,26 @@ func (u UserController) GetUserInformation(c *gin.Context) {
 }
 
 func (u UserController) CreateUser(c *gin.Context) {
-	username := c.PostForm("username")
-	// password := c.PostForm("password")
-	displayName := c.PostForm("display_name")
+	type RequestData struct {
+		Username 		string `json:"username"`
+		Password 		string `json:"password"`
+		DisplayName 	string `json:"display_name"`
+	}
+
+	req := RequestData{}
+	if err := c.ShouldBindJSON(&req); err != nil {
+		utils.UnprocessableLog(c, err)
+		return
+	}
+
+	hash, err := bcrypt.GenerateFromPassword([]byte(req.Password), 10)
+	if err != nil {
+		utils.UnprocessableLog(c, err)
+		return
+	}
 
 	md := new(models.User)
-	res, err := md.CreateUser(username, displayName)
+	res, err := md.CreateUser(req.Username, string(hash), req.DisplayName)
 	if err != nil {
 		utils.UnprocessableLog(c, err)
 		return
