@@ -240,14 +240,38 @@ func (q Quiz) GetAllQuiz() ([]forms.Quiz, error) {
 	db := db.GetDB()
 
 	var quizzes []forms.Quiz
+	var questions []forms.Question
+	var choices []forms.Choice
 
 	stmt, err := db.Prepare(`
-
+		SELECT DISTINCT fk_user_id, quiz_id, fk_quiz_category_id, title, description
+		FROM quizzes
+		WHERE used_flg = true
 	`)
 	if err != nil {
 		return quizzes, err
 	}
 	defer stmt.Close()
+
+	questionStmt, err := db.Prepare(`
+		SELECT DISTINCT quiz_question_id, question
+		FROM quiz_questions
+		WHERE fk_quiz_id = $1 AND used_flg = true
+	`)
+	if err != nil {
+		return quizzes, err
+	}
+	defer questionStmt.Close()
+
+	choiceStmt, err := db.Prepare(`
+		SELECT DISTINCT quiz_question_choice_id, question, is_correct
+		FROM quiz_question_choices
+		WHERE fk_quiz_question_id = $1 AND used_flg = true
+	`)
+	if err != nil {
+		return quizzes, err
+	}
+	defer choiceStmt.Close()
 
 	rows, err := stmt.Query()
 	if err != nil {
@@ -257,14 +281,160 @@ func (q Quiz) GetAllQuiz() ([]forms.Quiz, error) {
 
 	for rows.Next() {
 		var quiz forms.Quiz
-		err := rows.Scan()
+		err := rows.Scan(&quiz.UserID, &quiz.QuizID, &quiz.QuizCategoryID, &quiz.Title, &quiz.Description)
 		if err != nil {
 			return quizzes, err
 		}
+
+		questionRows, err := questionStmt.Query(quiz.QuizID)
+		if err != nil {
+			return quizzes, err
+		}
+		defer questionRows.Close()
+
+		for questionRows.Next() {
+			var question forms.Question
+			err := rows.Scan(&question.QuestionID, &question.Question)
+			if err != nil {
+				return quizzes, err
+			}
+
+			choiceRows, err := choiceStmt.Query(question.QuestionID)
+			if err != nil {
+				return quizzes, err
+			}
+			choiceRows.Close()
+
+			for choiceRows.Next() {
+				var choice forms.Choice
+				err := rows.Scan(&choice.ChoiceID, &choice.Choice, &choice.IsCorrect)
+				if err != nil {
+					return quizzes, err
+				}
+				choices = append(choices, choice)
+			}
+
+			question = forms.Question{
+				QuestionID: question.QuestionID,
+				Question: question.Question,
+				Choices: choices,
+			}
+
+			questions = append(questions, question)
+		}
+
+		quiz = forms.Quiz{
+			UserID: quiz.UserID,
+			QuizID: quiz.QuizID,
+			QuizCategoryID: quiz.QuizCategoryID,
+			Title: quiz.Title,
+			Description: quiz.Description,
+			Questions: questions,
+		}
+
 		quizzes = append(quizzes, quiz)
 	}
 
 	return quizzes, nil
+}
+
+func (q Quiz) GetQuizFromID(quizID uint64) (forms.Quiz, error) {
+	db := db.GetDB()
+
+	var quiz forms.Quiz
+	var questions []forms.Question
+	var choices []forms.Choice
+
+	stmt, err := db.Prepare(`
+		SELECT DISTINCT fk_user_id, quiz_id, fk_quiz_category_id, title, description
+		FROM quizzes
+		WHERE quiz_id = $1 AND used_flg = true
+	`)
+	if err != nil {
+		return quiz, err
+	}
+	defer stmt.Close()
+
+	questionStmt, err := db.Prepare(`
+		SELECT DISTINCT quiz_question_id, question
+		FROM quiz_questions
+		WHERE fk_quiz_id = $1 AND used_flg = true
+	`)
+	if err != nil {
+		return quiz, err
+	}
+	defer questionStmt.Close()
+
+	choiceStmt, err := db.Prepare(`
+		SELECT DISTINCT quiz_question_choice_id, question, is_correct
+		FROM quiz_question_choices
+		WHERE fk_quiz_question_id = $1 AND used_flg = true
+	`)
+	if err != nil {
+		return quiz, err
+	}
+	defer choiceStmt.Close()
+
+	rows, err := stmt.Query(quizID)
+	if err != nil {
+		return quiz, err
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		err := rows.Scan(&quiz.UserID, &quiz.QuizID, &quiz.QuizCategoryID, &quiz.Title, &quiz.Description)
+		if err != nil {
+			return quiz, err
+		}
+
+		questionRows, err := questionStmt.Query(quizID)
+		if err != nil {
+			return quiz, err
+		}
+		defer questionRows.Close()
+
+		for questionRows.Next() {
+			var question forms.Question
+			err := rows.Scan(&question.QuestionID, &question.Question)
+			if err != nil {
+				return quiz, err
+			}
+
+			choiceRows, err := choiceStmt.Query(question.QuestionID)
+			if err != nil {
+				return quiz, err
+			}
+			choiceRows.Close()
+
+			for choiceRows.Next() {
+				var choice forms.Choice
+				err := rows.Scan(&choice.ChoiceID, &choice.Choice, &choice.IsCorrect)
+				if err != nil {
+					return quiz, err
+				}
+				choices = append(choices, choice)
+			}
+
+			question = forms.Question{
+				QuestionID: question.QuestionID,
+				Question: question.Question,
+				Choices: choices,
+			}
+
+			questions = append(questions, question)
+		}
+	}
+
+	quiz = forms.Quiz{
+			UserID: quiz.UserID,
+			QuizID: quiz.QuizID,
+			QuizCategoryID: quiz.QuizCategoryID,
+			Title: quiz.Title,
+			Description: quiz.Description,
+			Questions: questions,
+		}
+
+	return quiz, nil
 }
 
 func (q Quiz) DeleteQuiz(quizID uint64) error {
