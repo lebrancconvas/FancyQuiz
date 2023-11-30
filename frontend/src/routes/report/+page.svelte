@@ -1,6 +1,6 @@
 <script lang="ts">
   import axios from 'axios';
-  import { LOCAL_BASE_URL } from '$env/static/private';
+  // import { LOCAL_BASE_URL } from '$env/static/private';
   import Footer from '../../components/Footer.svelte';
 
   let userID = 1; // Test User ID.
@@ -11,7 +11,7 @@
       userID: userID,
       content: reportContent
     };
-    axios.post(`${LOCAL_BASE_URL}/reports`, requestData)
+    axios.post(`http://localhost:8011/api/reports`, requestData)
       .then(response => {
         console.log(response);
         window.location.reload();
