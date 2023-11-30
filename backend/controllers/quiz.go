@@ -49,6 +49,27 @@ func (q QuizController) GetAllQuizFromParticipatedUser(c *gin.Context) {
 
 }
 
+func (q QuizController) GetQuizByID(c *gin.Context) {
+	quizID, err := strconv.Atoi(c.Param("quiz_id"))
+	if err != nil {
+		utils.UnprocessableLog(c, err)
+		return
+	}
+
+	md := new(models.Quiz)
+
+	res, err := md.GetQuizByID(uint64(quizID))
+	if err != nil {
+		utils.UnprocessableLog(c, err)
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"message": "Get Quiz By ID Success!",
+		"data": res,
+	})
+}
+
 func (q QuizController) GetAllQuizCategory(c *gin.Context) {
 	md := new(models.Quiz)
 	res, err := md.GetAllQuizCategory()

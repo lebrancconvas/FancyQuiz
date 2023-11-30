@@ -338,7 +338,7 @@ func (q Quiz) GetAllQuiz() ([]forms.Quiz, error) {
 	return quizzes, nil
 }
 
-func (q Quiz) GetQuizFromID(quizID uint64) (forms.Quiz, error) {
+func (q Quiz) GetQuizByID(quizID uint64) (forms.Quiz, error) {
 	db := db.GetDB()
 
 	var quiz forms.Quiz
