@@ -79,51 +79,24 @@ func (u User) GetUserInformation(userID uint64) ([]forms.UserInformation, error)
 	return userInformations, nil
 }
 
-func (u User) CreateUser(username string, password string, displayName string) (uint64, error) {
+func (u User) CreateUser(username string, password string, displayName string) error {
 	db := db.GetDB()
 
-	var userID uint64
-
 	stmt, err := db.Prepare(`
-		INSERT INTO users (username, fk_role_id, display_name, passcode)
-		VALUES ($1, 1, $3, $2)
+		INSERT INTO users (fk_role_id, username, display_name, passcode)
+		VALUES (1, $1, $3, $2)
 	`)
 	if err != nil {
-		return userID, err
+		return err
 	}
 	defer stmt.Close()
 
 	_, err = stmt.Exec(username, password, displayName)
 	if err != nil {
-		return userID, err
+		return err
 	}
 
-	stmt, err = db.Prepare(`
-		SELECT id
-		FROM users
-		WHERE username = $1 AND display_name = $3 AND passcode = $2 AND used_flg = true
-		ORDER BY created_at DESC
-		LIMIT 1
-	`)
-	if err != nil {
-		return userID, err
-	}
-	defer stmt.Close()
-
-	rows, err := stmt.Query(username, displayName)
-	if err != nil {
-		return userID, err
-	}
-	defer rows.Close()
-
-	for rows.Next() {
-		err := rows.Scan(&userID)
-		if err != nil {
-			return userID, err
-		}
-	}
-
-	return userID, nil
+	return nil
 }
 
 func (u User) UpdateUser(userID uint64, displayName string) error {

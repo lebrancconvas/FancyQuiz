@@ -67,7 +67,7 @@ func (u UserController) CreateUser(c *gin.Context) {
 	}
 
 	md := new(models.User)
-	res, err := md.CreateUser(req.Username, string(hash), req.DisplayName)
+	err = md.CreateUser(req.Username, string(hash), req.DisplayName)
 	if err != nil {
 		utils.UnprocessableLog(c, err)
 		return
@@ -75,7 +75,6 @@ func (u UserController) CreateUser(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{
 		"message": "Create User Success!",
-		"data": res,
 	})
 }
 
